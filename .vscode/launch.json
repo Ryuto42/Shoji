@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Shoji}",
+            "name": "Debug Shoji",
+            "target": "Shoji",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug Shoji"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Shoji}",
+            "name": "Release Shoji",
+            "target": "Shoji",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release Shoji"
+        }
+    ]
+}

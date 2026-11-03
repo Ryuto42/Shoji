@@ -1,0 +1,55 @@
+#!/bin/zsh
+# リリース用の zip とアップデート情報（appcast.xml）を dist/ に作る
+#   scripts/release.sh 0.1.0
+# 作ったファイルを GitHub のリリースに添付すると、既存ユーザーに Sparkle 経由で配信される。
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+VERSION="${1:?使い方: scripts/release.sh <バージョン>  例: 0.1.0}"
+# タグ・URL・Info.plist にそのまま入るため、数字と点だけに限る
+[[ "$VERSION" =~ '^[0-9]+(\.[0-9]+){1,3}$' ]] || { echo "バージョンは 1.0.1 のような形で指定してください: $VERSION" >&2; exit 1; }
+REPO="Ryuto42/Shoji"
+TOOLS=".build/artifacts/sparkle/Sparkle/bin"
+
+[[ -s Resources/sparkle-public-key.txt ]] || { echo "Resources/sparkle-public-key.txt がありません" >&2; exit 1; }
+[[ -z "$(git status --porcelain 2>/dev/null)" ]] || echo "warning: コミットされていない変更があります" >&2
+
+# CFBundleVersion は Sparkle が新旧の比較に使うため、必ず増える値にする
+BUILD="$(date +%Y%m%d%H%M)"
+VERSION="$VERSION" BUILD="$BUILD" ARCHS="arm64 x86_64" ./build.sh
+
+rm -rf dist && mkdir -p dist
+ZIP="dist/Shoji-$VERSION.zip"
+
+# Developer ID で署名し、NOTARY_PROFILE（xcrun notarytool store-credentials で作る）があれば公証する
+if [[ -n "${NOTARY_PROFILE:-}" ]]; then
+  ditto -c -k --keepParent build/Shoji.app dist/notarize.zip
+  xcrun notarytool submit dist/notarize.zip --keychain-profile "$NOTARY_PROFILE" --wait
+  xcrun stapler staple build/Shoji.app
+  rm dist/notarize.zip
+else
+  echo "warning: 公証していないビルドです。初回起動時に「システム設定 → プライバシーとセキュリティ → このまま開く」が必要になります" >&2
+fi
+
+ditto -c -k --sequesterRsrc --keepParent build/Shoji.app "$ZIP"
+
+# 秘密鍵（キーチェーン）で zip に署名し、appcast.xml を作る
+"$TOOLS/generate_appcast" \
+  --download-url-prefix "https://github.com/$REPO/releases/download/v$VERSION/" \
+  --link "https://github.com/$REPO" \
+  dist
+
+# アプリは署名のない appcast.xml を受け付けない（SURequireSignedFeed）ため、署名されているか確かめる
+grep -q "sparkle-signatures:" dist/appcast.xml || { echo "appcast.xml に署名がありません。generate_appcast の出力を確認してください" >&2; exit 1; }
+
+shasum -a 256 "$ZIP"
+cat <<MSG
+
+できました:
+  $ZIP
+  dist/appcast.xml
+
+公開するには（内容を確認してから実行してください）:
+  git tag v$VERSION && git push origin v$VERSION
+  gh release create v$VERSION $ZIP dist/appcast.xml --title "Shoji $VERSION" --generate-notes
+MSG

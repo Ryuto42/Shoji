@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>ja</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ja</string>
+		<string>en</string>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>Shoji</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.ryuto.Shoji</string>
+	<key>CFBundleName</key>
+	<string>Shoji</string>
+	<key>CFBundleDisplayName</key>
+	<string>Shoji</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>26.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Used to show and control the song that is playing (Spotify and Music), empty the Trash, and switch dark mode.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Shows today's and upcoming events in the Calendar widget.</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>Shows incomplete items in the Reminders widget.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Shows recent files and notifies you of new downloads on the Downloads folder in the Dock.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Shows the weather for your current location in the Weather widget.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Shows the weather for your current location in the Weather widget.</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2026 Ryuto Kobayashi. GPL-3.0</string>
+	<key>SUFeedURL</key>
+	<string>https://github.com/Ryuto42/Shoji/releases/latest/download/appcast.xml</string>
+	<key>SURequireSignedFeed</key>
+	<true/>
+	<key>SUVerifyUpdateBeforeExtraction</key>
+	<true/>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUEnableSystemProfiling</key>
+	<false/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
